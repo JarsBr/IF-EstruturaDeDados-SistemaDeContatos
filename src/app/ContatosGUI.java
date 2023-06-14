@@ -58,7 +58,11 @@ class ContatosGUI {
                 String grupo = grupoField.getText();
 
                 Contato contato = new Contato(nome, telefone, email, grupo);
-                listModel.addElement(contato);
+                
+               adicionarContatoLista(contato);
+               imprimirContatosLista(todos_contatos);
+                
+                //listModel.addElement(contato);
 
                 nomeField.setText("");
                 telefoneField.setText("");
@@ -74,7 +78,8 @@ class ContatosGUI {
                 String direcao = JOptionPane.showInputDialog(frame, "Direção (1 para crescente, 2 para decrescente):");
 
                 boolean crescente = direcao.equals("1");
-
+                
+                
                 ArrayList<Contato> contatos = Collections.list(listModel.elements());
                 Collections.sort(contatos, new ContatoComparator(opcao, crescente));
                 listModel.clear();
@@ -86,6 +91,8 @@ class ContatosGUI {
 
         listModel = new DefaultListModel<>();
         JList<Contato> listaContatos = new JList<>(listModel);
+        
+        //Fazewr for para adiocnar elemento na lista contatos
 
         frame.add(panel, BorderLayout.NORTH);
         frame.add(new JScrollPane(listaContatos), BorderLayout.CENTER);
@@ -95,5 +102,30 @@ class ContatosGUI {
         frame.setSize(400, 300);
         frame.setVisible(true);
     }
+    Contato[] todos_contatos = new Contato[20];
+    public void adicionarContatoLista(Contato contato) {
+         for(int i = 0; i < 20; i++) {
+        	if(todos_contatos[i] == null) {
+        		todos_contatos[i] = contato;
+        		break;
+        	}
+         }
+         
+		
+	}
+    public Contato[] imprimirContatosLista(Contato[] contatos) {
+    	int cont = 0;
+		for(Contato p: contatos) {
+			if(p != null) {
+			cont++;
+			System.out.println(p.toString());
+			}
+		}
+		Contato[] todos_contatos_novos = new Contato[cont];
+		for(int i = 0; i < cont; i++) {
+			todos_contatos_novos[i] = contatos[i];
+		}
+		return todos_contatos_novos;
+	}
 }
 

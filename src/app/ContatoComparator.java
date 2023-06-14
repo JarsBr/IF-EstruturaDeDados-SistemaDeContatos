@@ -15,16 +15,17 @@ class ContatoComparator implements Comparator<Contato> {
         int resultado = 0;
         switch (opcao) {
             case "nome":
-                resultado = c1.getNome().compareTo(c2.getNome());
+                resultado = c1.getNome().toLowerCase().compareTo(c2.getNome().toLowerCase());
+                System.out.println(c1.getNome() + c2.getNome());
                 break;
             case "telefone":
-                resultado = c1.getTelefone().compareTo(c2.getTelefone());
+                resultado = c1.getTelefone().toLowerCase().compareTo(c2.getTelefone().toLowerCase());
                 break;
             case "email":
-                resultado = c1.getEmail().compareTo(c2.getEmail());
+                resultado = c1.getEmail().toLowerCase().compareTo(c2.getEmail().toLowerCase());
                 break;
             case "grupo":
-                resultado = c1.getGrupo().compareTo(c2.getGrupo());
+                resultado = c1.getGrupo().toLowerCase().compareTo(c2.getGrupo().toLowerCase());
                 break;
         }
         return crescente ? resultado : -resultado;
