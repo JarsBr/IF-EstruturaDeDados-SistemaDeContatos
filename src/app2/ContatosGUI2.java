@@ -1,26 +1,23 @@
-package app;
+package app2;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-//import java.util.Collections;
+import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-//import javax.swing.JList;
-
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-//import javax.swing.SwingUtilities;
-
 import javax.swing.JTextField;
-
+import javax.swing.SwingUtilities;
 
 class ContatosGUI {
     private JFrame frame;
@@ -64,18 +61,13 @@ class ContatosGUI {
 
                 Contato contato = new Contato(nome, telefone, email, grupo);
 
-                if (contador_contatos < todos_contatos.length) {
-                    todos_contatos[contador_contatos] = contato;
-                    contador_contatos++;
-                    imprimirContatosLista();
+                adicionarContatoLista(contato);
+                imprimirContatosLista();
 
-                    nomeField.setText("");
-                    telefoneField.setText("");
-                    emailField.setText("");
-                    grupoField.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "A lista de contatos está cheia.");
-                }
+                nomeField.setText("");
+                telefoneField.setText("");
+                emailField.setText("");
+                grupoField.setText("");
             }
         });
 
@@ -105,12 +97,24 @@ class ContatosGUI {
         frame.setVisible(true);
     }
 
+    public void adicionarContatoLista(Contato contato) {
+        if (contador_contatos < 20) {
+            todos_contatos[contador_contatos] = contato;
+            contador_contatos++;
+        } else {
+            JOptionPane.showMessageDialog(frame, "A lista de contatos está cheia.");
+        }
+    }
+
     public void imprimirContatosLista() {
         contatosTextArea.setText("");
         for (int i = 0; i < contador_contatos; i++) {
-            contatosTextArea.append(todos_contatos[i].toString() + "\n");
+            if (todos_contatos[i] != null) {
+                contatosTextArea.append(todos_contatos[i].toString() + "\n");
+            }
         }
     }
+
 
     public void ordenarContatos(String opcao, boolean crescente) {
         int tamanho = contador_contatos;
@@ -126,9 +130,12 @@ class ContatosGUI {
             ordenarContatosPorCampo(contatos, crescente, "grupo");
         }
 
-        todos_contatos = contatos;
+        // Copiar os contatos ordenados de volta para todos_contatos
+        System.arraycopy(contatos, 0, todos_contatos, 0, tamanho);
+
         imprimirContatosLista();
     }
+
 
     private void ordenarContatosPorCampo(Contato[] contatos, boolean crescente, String campo) {
         for (int i = 0; i < contatos.length - 1; i++) {
@@ -147,6 +154,10 @@ class ContatosGUI {
     }
 
     private String getCampo(Contato contato, String campo) {
+        if (contato == null) {
+            return "";
+        }
+
         if (campo.equals("nome")) {
             return contato.getNome();
         } else if (campo.equals("telefone")) {
@@ -156,8 +167,10 @@ class ContatosGUI {
         } else if (campo.equals("grupo")) {
             return contato.getGrupo();
         }
+
         return "";
     }
+
 
     private int compararStringsIgnoreCase(String str1, String str2) {
         int minLength = Math.min(str1.length(), str2.length());
